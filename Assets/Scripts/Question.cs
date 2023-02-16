@@ -9,6 +9,7 @@ public class Question : MonoBehaviour
     public Text answerText;
     public GameObject[] questionObjects;
     public Sprite[] questionItems;
+    public Sprite[] hitungItems;
     public Canvas canvas;
     public string numberText;
 
@@ -86,12 +87,6 @@ public class Question : MonoBehaviour
                     //Debug.Log(numberFromImage1);
             }
 
-            if(SceneMan.prevScene == "bagi")
-            {
-                LoadSpriteBagi();
-                
-            }
-
         }
 
         if(SceneMan.prevScene == "kurang")
@@ -104,17 +99,47 @@ public class Question : MonoBehaviour
                 newQuestion1.GetComponent<RectTransform>().localPosition = tempPos;
             }
         }
+        if(SceneMan.prevScene == "banding")
+        {
             LogicManager.StartCalculation(numberFromImage, numberFromImage1, answerButtons, answerText);
+
+        }else
+        {
+            LogicManager.StartCalculation(numberFromImage, numberFromImage1, answerButtons, answerText);
+        }
+
     }
 
     void LoadSprite()
     {
-        LoadBothSPrites();
+        
+        if(SceneMan.prevScene == "hitung")
+        {
+            LoadSpriteHitung();
+        }else if(SceneMan.prevScene == "banding")
+        {
+            LoadSpriteBanding();
+        }else
+        {
+            LoadBothSPrites();
+        }
     }
 
     void LoadSpriteBagi()
     {
         
+    }
+
+    void LoadSpriteHitung()
+    {
+
+    }
+
+    void LoadSpriteBanding()
+    {
+        LoadBothSPrites();
+        newQuestion.GetComponent<RectTransform>().localPosition = new Vector3(0, 360, 0); //spawn question in the middle (new position)
+        newQuestion1.GetComponent<RectTransform>().localPosition = new Vector3(0, -360, 0);
     }
     
 }

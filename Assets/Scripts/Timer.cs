@@ -48,6 +48,25 @@ public class Timer : MonoBehaviour
         }
     }
 
+    public static void CheckAnswerBanding(Button clickedButton, Text AnswerText, string correctAnswer)
+    {
+        bool IsCorrect;
+        string clickedAnswer = clickedButton.GetComponentInChildren<Text>().text;
+        Debug.Log(clickedAnswer);
+        AnswerText.GetComponentInChildren<Text>().text = clickedAnswer.ToString();
+        if (clickedAnswer == correctAnswer)
+        {
+            IsCorrect = true;
+            Debug.Log("Correct! Score: " );
+            StopCountdown(IsCorrect);
+        }else
+        {
+            IsCorrect = false;
+            Debug.Log("Incorrect");
+            Timer.GameOver();
+        }
+    }
+
     public static void CheckAnswer(int correctAnswer, Button clickedButton, Text AnswerText)
     {
         bool IsCorrect;

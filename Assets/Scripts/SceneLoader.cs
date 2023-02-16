@@ -7,6 +7,8 @@ public class SceneLoader : MonoBehaviour
     public GameObject bagi;
     public GameObject tambah;
     public GameObject kali;
+    public GameObject hitung;
+    public GameObject banding;
     public Canvas canvas;
 
     void Start()
@@ -82,7 +84,7 @@ public class SceneLoader : MonoBehaviour
     
     void Hitung()
     {
-        GameObject obj = Instantiate(bagi);
+        GameObject obj = Instantiate(hitung);
         obj.transform.SetParent(canvas.transform);
         obj.GetComponent<RectTransform>().localPosition = new Vector3(-170,0,0);
         obj.transform.localScale = new Vector3(1f, 1f, 0f);
@@ -91,10 +93,15 @@ public class SceneLoader : MonoBehaviour
     
     void Banding()
     {
-        GameObject obj = Instantiate(bagi);
+        GameObject objToDestroy = GameObject.Find("Answer Area"); 
+        if (objToDestroy != null)
+        {
+            Destroy(objToDestroy);
+        }
+        GameObject obj = Instantiate(banding);
         obj.transform.SetParent(canvas.transform);
-        obj.GetComponent<RectTransform>().localPosition = new Vector3(-170,0,0);
-        obj.transform.localScale = new Vector3(1f, 1f, 0f);
+        obj.GetComponent<RectTransform>().localPosition = new Vector3(0,0,0);
+        obj.transform.localScale = new Vector3(1.3f, 1.3f, 0f);
 
     }
 }

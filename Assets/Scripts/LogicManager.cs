@@ -90,6 +90,34 @@ public class LogicManager : MonoBehaviour
             }
 
         }
+        else if (SceneMan.prevScene == "banding")
+        {
+
+            string correctAnswer;
+            if(a<b)
+            {
+                correctAnswer ="<";
+            }else if(a>b)
+            {
+                correctAnswer = ">";
+            }else
+            {
+                correctAnswer = "=";
+            }
+
+            
+            char[] randomSymbols = GenerateRandomSymbols(answerButtons);
+            answerText.transform.localPosition = new Vector3(25.0f, 125.0f, 0);
+            // Assign random numbers to buttons
+            for (int i = 0; i < answerButtons.Length; i++)
+            {
+                int capturedIndex = i;
+                answerButtons[i].onClick.AddListener(() => Timer.CheckAnswerBanding(answerButtons[capturedIndex], answerText, correctAnswer));
+                answerButtons[i].GetComponentInChildren<Text>().text = randomSymbols[i].ToString();
+                
+            }
+
+        }
         
     }
 
@@ -108,6 +136,21 @@ public class LogicManager : MonoBehaviour
         return numbers;
     }
 
+    private static char[] GenerateRandomSymbols(Button[] buttons)
+    {
+        char[] symbols = new char[] { '>', '<', '=' }; // create an array with the two symbols
+        ShuffleSymbols(symbols); // shuffle the array to randomize the placement of the symbols
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].GetComponentInChildren<Text>().text = symbols[i % symbols.Length].ToString();
+            // assign the symbols to the buttons in a repeating pattern
+        }
+
+        return symbols;
+    }
+
+
     private static void ShuffleArray(int[] array)
     {
         for (int i = 0; i < array.Length; i++)
@@ -119,5 +162,15 @@ public class LogicManager : MonoBehaviour
         }
     }
 
-    
+    private static void ShuffleSymbols<T>(T[] array)
+    {
+        int n = array.Length;
+        for (int i = 0; i < n - 1; i++)
+        {
+            int j = UnityEngine.Random.Range(i, n);
+            T temp = array[j];
+            array[j] = array[i];
+            array[i] = temp;
+        }
+    }
 }
