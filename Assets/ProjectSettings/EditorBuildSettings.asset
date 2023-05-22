@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/welcome.unity
+    guid: 6e7077e82e8984d4c95887ef38960b90
+  - enabled: 1
+    path: Assets/Scenes/mainMenu.unity
+    guid: 39392934048ad4e49be78e76ea9e7752
+  - enabled: 1
+    path: Assets/Scenes/bagi.unity
+    guid: 987f87d4e701cda4289a3f6954dd04d4
+  - enabled: 1
+    path: Assets/Scenes/hitung.unity
+    guid: 9292fc6701cd9724bbf1d73b1cdefcab
+  - enabled: 1
+    path: Assets/Scenes/kali.unity
+    guid: af604494c944332459f1cc9dec9c6f07
+  - enabled: 1
+    path: Assets/Scenes/kurang.unity
+    guid: 2e02788c104763745a72c8d634b3aebb
+  - enabled: 1
+    path: Assets/Scenes/tambah.unity
+    guid: ce39ce8a5902c8749bf40f9b1c319424
+  - enabled: 1
+    path: Assets/Scenes/gameArea.unity
+    guid: f467c64fcdceabf479027b2bc44765ff
+  m_configObjects: {}
