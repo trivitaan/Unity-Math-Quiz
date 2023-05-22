@@ -5,7 +5,10 @@ public class NextLevelButton : MonoBehaviour
 {
     public void OnClick()
     {
-        Debug.Log(Timer.prevScene);
-        Timer.NextLevel(Timer.prevScene);
+        Debug.Log(SceneMan.prevScene);
+        Timer.NextLevel(SceneMan.prevScene);
+        //add function to move the level selection's position
     }
+
+    
 }

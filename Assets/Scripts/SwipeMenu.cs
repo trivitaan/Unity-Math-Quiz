@@ -17,17 +17,5 @@ public class SwipeMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        pos = new float[transform.childCount];
-        float distance = 1f/(pos.Length - 1f);
-        for(int i = 0; i < pos.Length; i++){
-            pos[i] = distance * i; 
-        }
-        if(Input.GetMouseButton(0))
-        {
-            scroll_pos = scrollbar.GetComponent<Scrollbar>().value;
-        }else
-        {
-            
-        }
     }
 }

@@ -1,28 +1,36 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class Timer : MonoBehaviour
 {
-    public GameObject gagal;
-    public GameObject sukses;
-    public Text timerText;
-    private float countdownTime = 30f;
+    public GameObject gagal, sukses;
+    public Text timerText, scoreText, checkScore;
     private float currentTime;
-    public static bool gameActive = true;
-    public static float timeLeft;
-    private static Timer timer;
-    public static string prevScene;
+    public static bool gameActive;
+    public static string currentOperation;
     
+    public static string prevScene;
+
+
+    private static readonly Dictionary<string, string> sceneMap = new Dictionary<string, string>
+    {
+        { "kurang", "subtraction" },
+        { "tambah", "addition" },
+        { "kali", "multiplication" },
+        { "bagi", "division" },
+        { "hitung", "count" },
+        { "banding", "comparison" },
+    };
 
     private void Start()
     {
-        prevScene = (SceneMan.prevScene).ToString();
-        timer = GetComponent<Timer>();
-        currentTime = countdownTime;
         gameActive = true;
+        currentOperation = sceneMap[SceneMan.prevScene.ToString()];
+        currentTime = 15f;
+        prevScene = SceneMan.prevScene.ToString();
+
     }
 
     private void Update()
@@ -31,89 +39,69 @@ public class Timer : MonoBehaviour
         {
             currentTime -= Time.deltaTime;
             timerText.text = currentTime.ToString("0");
-
+            scoreText.text = PlayerPrefs.GetInt(currentOperation + "Score", 0).ToString();
             if (currentTime <= 0f)
-            {
                 GameOver();
-            }
         }
     }
 
-    public static void StopCountdown(bool answerCorrect)
+    public void StopCountdown(bool answerCorrect)
     {
         gameActive = false;
-        if(answerCorrect)
+        if (answerCorrect)
+            sukses.SetActive(true);
+            checkScore.text = PlayerPrefs.GetInt(currentOperation + "Score", 0).ToString();
+    }
+
+    public static void CheckAnswer(int correctAnswer, Button clickedButton, Text AnswerText)
+    {
+        bool IsCorrect = int.Parse(clickedButton.GetComponentInChildren<Text>().text) == correctAnswer;
+        AnswerText.GetComponentInChildren<Text>().text = clickedButton.GetComponentInChildren<Text>().text;
+        if (IsCorrect)
         {
-            timer.sukses.SetActive(true);
+            LevelCompletedSuccessfully(currentOperation);
+            Timer timer = FindObjectOfType<Timer>();
+            timer.StopCountdown(true);
+        }
+        else
+        {
+            Timer timer = FindObjectOfType<Timer>();
+            timer.GameOver();
         }
     }
 
     public static void CheckAnswerBanding(Button clickedButton, Text AnswerText, string correctAnswer)
     {
-        bool IsCorrect;
-        string clickedAnswer = clickedButton.GetComponentInChildren<Text>().text;
-        Debug.Log(clickedAnswer);
-        AnswerText.GetComponentInChildren<Text>().text = clickedAnswer.ToString();
-        if (clickedAnswer == correctAnswer)
+        bool IsCorrect = clickedButton.GetComponentInChildren<Text>().text == correctAnswer;
+        AnswerText.GetComponentInChildren<Text>().text = clickedButton.GetComponentInChildren<Text>().text;
+        if (IsCorrect)
         {
-            IsCorrect = true;
-            Debug.Log("Correct! Score: " );
-            StopCountdown(IsCorrect);
-        }else
-        {
-            IsCorrect = false;
-            Debug.Log("Incorrect");
-            Timer.GameOver();
-        }
-    }
-
-    public static void CheckAnswer(int correctAnswer, Button clickedButton, Text AnswerText)
-    {
-        bool IsCorrect;
-        int clickedAnswer = int.Parse(clickedButton.GetComponentInChildren<Text>().text);
-        Debug.Log(clickedAnswer);
-        AnswerText.GetComponentInChildren<Text>().text = clickedAnswer.ToString();
-        if (clickedAnswer == correctAnswer)
-        {
-            PlayerPrefs.SetInt("Score", 0);
-            int currentScore = PlayerPrefs.GetInt("Score", 0);
-            PlayerPrefs.SetInt("Score", currentScore += 20);
-            Debug.Log("Correct! Score: " + (currentScore));
-            IsCorrect = true;
-            //Success();
-            StopCountdown(IsCorrect);
+            LevelCompletedSuccessfully(currentOperation);
+            Timer timer = FindObjectOfType<Timer>();
+            timer.StopCountdown(true);
         }
         else
         {
-            IsCorrect = false;
-            Debug.Log("Incorrect");
-            Timer.GameOver();
-            //StopCountdown(IsCorrect);
+            Timer timer = FindObjectOfType<Timer>();
+            timer.GameOver();
         }
     }
-
-    private static readonly Dictionary<string, string> sceneMap = new Dictionary<string, string>
-    {
-        { "kurang", "kurang" },
-        { "bagi", "bagi" },
-        { "tambah", "tambah" },
-        { "kali", "kali" },
-        { "banding", "banding" },
-        { "hitung", "hitung" },
-    };
 
     public static void NextLevel(string prevScene)
     {
-        if (sceneMap.TryGetValue(prevScene, out string sceneName))
-        {
-            SceneManager.LoadScene(sceneName);
-        }
+        SceneManager.LoadScene(prevScene);
     }
 
-    public static void GameOver()
+    public void GameOver()
     {
         gameActive = false;
-        timer.timerText.text = "0";
-        timer.gagal.SetActive(true);
+        timerText.text = "0";
+        gagal.SetActive(true);
+    }
+
+    public static void LevelCompletedSuccessfully(string currentOperation)
+    {
+        int scoreToAdd = 50;
+        PlayerPrefs.SetInt(currentOperation + "Score", PlayerPrefs.GetInt(currentOperation + "Score", 0) + scoreToAdd);
     }
 }

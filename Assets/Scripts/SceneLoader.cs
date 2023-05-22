@@ -3,43 +3,24 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    public GameObject kurang;
-    public GameObject bagi;
-    public GameObject tambah;
-    public GameObject kali;
-    public GameObject hitung;
-    public GameObject banding;
+    public GameObject kurang, bagi, tambah, kali, hitung, banding;
     public Canvas canvas;
 
     void Start()
     {
-        if (SceneMan.prevScene == "kurang")
+        string prevScene = SceneMan.prevScene;
+        switch (prevScene)
         {
-            Kurang();
-        }
-        else if (SceneMan.prevScene == "bagi")
-        {
-            Bagi();
-        }
-        else if (SceneMan.prevScene == "tambah")
-        {
-            Tambah();
-        }
-        else if (SceneMan.prevScene == "kali")
-        {
-            Kali();
-        }
-        else if (SceneMan.prevScene == "banding")
-        {
-            Banding();
-        }
-        else if (SceneMan.prevScene == "hitung")
-        {
-            Hitung();
+            case "kurang": Kurang(); break;
+            case "bagi": Bagi(); break;
+            case "tambah": Tambah(); break;
+            case "kali": Kali(); break;
+            case "hitung": Hitung(); break;
+            case "banding": Banding(); break;
         }
     }
 
-    void Kurang()
+    public void Kurang()
     {
         GameObject obj = Instantiate(kurang);
         obj.transform.SetParent(canvas.transform);
@@ -52,7 +33,8 @@ public class SceneLoader : MonoBehaviour
             Debug.Log("playerprefkurang : " + l);
         }
     }
-    void Tambah()
+    
+    public void Tambah()
     {
         GameObject obj = Instantiate(tambah);
         obj.transform.SetParent(canvas.transform);
@@ -66,7 +48,7 @@ public class SceneLoader : MonoBehaviour
             Debug.Log("Score Tambah : " + scoreTambah);
         }
     }
-    void Kali()
+    public void Kali()
     {
         GameObject obj = Instantiate(kali);
         obj.transform.SetParent(canvas.transform);
@@ -74,7 +56,7 @@ public class SceneLoader : MonoBehaviour
         obj.transform.localScale = new Vector3(1f, 1f, 0f);
         
     }
-    void Bagi()
+    public void Bagi()
     {
         GameObject obj = Instantiate(bagi);
         obj.transform.SetParent(canvas.transform);
@@ -82,21 +64,34 @@ public class SceneLoader : MonoBehaviour
         obj.transform.localScale = new Vector3(1f, 1f, 0f);
     }
     
-    void Hitung()
-    {
-        GameObject obj = Instantiate(hitung);
-        obj.transform.SetParent(canvas.transform);
-        obj.GetComponent<RectTransform>().localPosition = new Vector3(-170,0,0);
-        obj.transform.localScale = new Vector3(1f, 1f, 0f);
-
-    }
-    
-    void Banding()
+    public void Hitung()
     {
         GameObject objToDestroy = GameObject.Find("Answer Area"); 
+        GameObject objToDestroy2 = GameObject.Find("Pilih Jawaban Text"); 
+        GameObject objToDestroy3 = GameObject.Find("Perintah"); 
         if (objToDestroy != null)
         {
             Destroy(objToDestroy);
+            Destroy(objToDestroy2);
+            Destroy(objToDestroy3);
+        }
+        GameObject obj = Instantiate(hitung);
+        obj.transform.SetParent(canvas.transform);
+        obj.GetComponent<RectTransform>().localPosition = new Vector3(0,0,0);
+        obj.transform.localScale = new Vector3(1.3f, 1.3f, 0f);
+
+    }
+    
+    public void Banding()
+    {
+        GameObject objToDestroy = GameObject.Find("Answer Area"); 
+        GameObject objToDestroy2 = GameObject.Find("Pilih Jawaban Text"); 
+        GameObject objToDestroy3 = GameObject.Find("Perintah"); 
+        if (objToDestroy != null)
+        {
+            Destroy(objToDestroy);
+            Destroy(objToDestroy2);
+            Destroy(objToDestroy3);
         }
         GameObject obj = Instantiate(banding);
         obj.transform.SetParent(canvas.transform);

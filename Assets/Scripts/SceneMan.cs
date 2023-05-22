@@ -1,71 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneMan : MonoBehaviour
 {
-     public GameObject ExitPanel;
-     public static string prevScene;
+    public GameObject ExitPanel;
+    public static string prevScene;
 
-     public void StartGame()
-     {
-          SceneManager.LoadScene("mainMenu");
-     }
-     
-     public void OpenPanel()
-     {
-          if(ExitPanel != null)
-          {
-               bool isActive = ExitPanel.activeSelf;
-               ExitPanel.SetActive(!isActive);
-          }
-     }
-     
-     public void QuitGame()
-     {
-          Application.Quit();
-          Debug.Log("APP CLOSED");
-     }
-     
-     public void Counting()
-     {
-          SceneManager.LoadScene("hitung");
-     }
-     
-     public void Comparison()
-     {
-          SceneManager.LoadScene("banding");
-     }
-     
-     public void Substraction()
-     {
-          SceneManager.LoadScene("kurang");
-     }
-     
-     public void Addition()
-     {
-          SceneManager.LoadScene("tambah");
-     }
-     
-     public void Division()
-     {
-          SceneManager.LoadScene("bagi");
-     }
-     
-     public void Multiplication()
-     {
-          SceneManager.LoadScene("kali");
-     }
-     
-     public void EnterArena()
-     {
-          prevScene = SceneManager.GetActiveScene().name;
-          SceneManager.LoadScene("gameArea");
-     }
-     
-     public void BackToMain()
-     {
-          SceneManager.LoadScene("mainMenu");
-     }
+    public void StartGame()
+    {
+        LoadScene("mainMenu");
+    }
+
+    public void OpenPanel()
+    {
+        if (ExitPanel != null)
+        {
+            ExitPanel.SetActive(!ExitPanel.activeSelf);
+        }
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+        Debug.Log("APP CLOSED");
+    }
+
+    public void Counting() => LoadScene("hitung");
+    public void Comparison() => LoadScene("banding");
+    public void Substraction() => LoadScene("kurang");
+    public void Addition() => LoadScene("tambah");
+    public void Division() => LoadScene("bagi");
+    public void Multiplication() => LoadScene("kali");
+    public void EnterArena()
+    {
+        prevScene = SceneManager.GetActiveScene().name;
+        LoadScene("gameArea");
+    }
+
+    public void BackToMain() => LoadScene("mainMenu");
+    
+    public void ClearAllData()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
+    private void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
 }

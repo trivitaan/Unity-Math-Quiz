@@ -9,7 +9,6 @@ public class Question : MonoBehaviour
     public Text answerText;
     public GameObject[] questionObjects;
     public Sprite[] questionItems;
-    public Sprite[] hitungItems;
     public Canvas canvas;
     public string numberText;
 
@@ -18,9 +17,23 @@ public class Question : MonoBehaviour
     Sprite questionItem, questionItem1;
     int numberFromImage, numberFromImage1;
 
+    //Hitung
+    public Sprite[] countObjects;
+    Sprite countObjectSprite;
+    public GameObject questionPrefab;
+    int amountOfObjects;
+    GameObject newCountObj;
+    Sprite countItem;
+
+    //Bagi
+    public GameObject panelBagi;
+    public Text numberToDivideText;
+    public Text dividerText;
+
     void Start()
     {
         LoadQuestions();
+        amountOfObjects = Random.Range(0, 9);
     }
 
     void LoadQuestions()
@@ -116,10 +129,16 @@ public class Question : MonoBehaviour
         if(SceneMan.prevScene == "hitung")
         {
             LoadSpriteHitung();
-        }else if(SceneMan.prevScene == "banding")
+        }
+        else if(SceneMan.prevScene == "banding")
         {
             LoadSpriteBanding();
-        }else
+        }
+        else if(SceneMan.prevScene == "bagi")
+        {
+            LoadSpriteBagi();
+        }
+        else
         {
             LoadBothSPrites();
         }
@@ -127,12 +146,32 @@ public class Question : MonoBehaviour
 
     void LoadSpriteBagi()
     {
-        
-    }
+        panelBagi.SetActive(true);
+        int b = Random.Range(2, 9); // Array 'b' containing numbers
+        int[] a = new int[100]; // Array 'a' to store numbers
 
-    void LoadSpriteHitung()
-    {
+        // Populate 'a' array with random numbers between 1 and 100
+        for (int i = 0; i < a.Length; i++)
+        {
+            a[i] = Random.Range(1, 101);
+        }
 
+        // Loop to find pairs of divisible numbers
+        for (int i = 0; i < a.Length; i++)
+        {
+            int numberToDivide = a[i];
+            if (numberToDivide % b == 0)
+                {
+                    int divider = b;
+                    numberToDivideText.text = numberToDivide.ToString();
+                    dividerText.text = divider.ToString();
+                    LogicManager.StartCalculation(numberToDivide, divider, answerButtons, answerText);
+                    break; // Exit the loop once a pair is found
+                }
+
+            // Store the values of 'a' and 'b' if a pair is found
+            
+        }
     }
 
     void LoadSpriteBanding()
@@ -141,5 +180,53 @@ public class Question : MonoBehaviour
         newQuestion.GetComponent<RectTransform>().localPosition = new Vector3(0, 360, 0); //spawn question in the middle (new position)
         newQuestion1.GetComponent<RectTransform>().localPosition = new Vector3(0, -360, 0);
     }
+
+    void LoadSpriteHitung()
+    {
+        int amountOfObjects = Random.Range(1, 7);
+        Debug.Log("Hitung " + amountOfObjects + " item");
+        int getIndex = Random.Range(0, countObjects.Length);
+        
+        float xPositionIncrement = 185.0f; // Amount to increment the position x by
+        float yPositionIncrement = -275.0f; // Amount to increment the position x by
+        float yPosition = 120.0f; // Fixed Y position
+        float xStartingPos = 550f;
+
+        for (int i = 0; i < amountOfObjects; i++)
+        {
+            Sprite countItem = countObjects[getIndex];
+
+            GameObject newCountObj = Instantiate(questionPrefab);
+            newCountObj.GetComponent<SpriteRenderer>().sprite = countItem;
+
+            // Set position on canvas
+            newCountObj.transform.SetParent(canvas.transform);
+            // Increase Y position if needed
+            float xPosition = -190.0f + i * xPositionIncrement;
+
+            if (xPosition < 250.0f)
+            {
+                newCountObj.GetComponent<RectTransform>().localPosition = new Vector3(xPosition, yPosition, 0);
+            }
+            else //if(xPosition >= 250.0f)
+            {
+                newCountObj.GetComponent<RectTransform>().localPosition = new Vector3(xPosition - xStartingPos, yPosition + yPositionIncrement, 0);
+            }
+
+            //why only once??
+
+            newCountObj.GetComponent<RectTransform>().sizeDelta = new Vector2(70, 70);
+            newCountObj.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            newCountObj.transform.localScale = new Vector3(45f, 45f, 0f);
+
+            // Scale prefab
+            RectTransform rectTransform = newCountObj.GetComponent<RectTransform>();
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        }
+        LogicManager.StartCalculation(amountOfObjects, 1, answerButtons, answerText);
+    }
+
+
     
 }

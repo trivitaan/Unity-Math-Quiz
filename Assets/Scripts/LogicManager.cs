@@ -90,6 +90,23 @@ public class LogicManager : MonoBehaviour
             }
 
         }
+        else if (SceneMan.prevScene == "hitung")
+        {
+            int hitungan = a*b;
+
+            Debug.Log("correct " + hitungan);
+            int[] randomNumbers = GenerateRandomNumbers(answerButtons.Length, hitungan, answerButtons);
+            
+            // Assign random numbers to buttons
+            for (int i = 0; i < answerButtons.Length; i++)
+            {
+                int capturedIndex = i;
+                answerButtons[i].onClick.AddListener(() => Timer.CheckAnswer(hitungan, answerButtons[capturedIndex], answerText));
+                answerButtons[i].GetComponentInChildren<Text>().text = randomNumbers[i].ToString();
+                
+            }
+
+        }
         else if (SceneMan.prevScene == "banding")
         {
 
